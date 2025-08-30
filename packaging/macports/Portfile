@@ -1,0 +1,18 @@
+PortSystem          1.0
+name                neon-world-os
+version             290.0.0
+categories          sysutils
+platforms           darwin
+maintainers         none
+license             MIT
+description         Host-embedded OS simulator (C++)
+homepage            https://example.invalid/neon-world-os
+master_sites        https://github.com/your/repo/releases
+distname            neon-world-os-${version}
+checksums           rmd160 0 sha256 0 size 0
+depends_build       port:cmake port:clang-18
+use_configure       yes
+configure.cmd       cmake
+configure.args      -S . -B build -DCMAKE_BUILD_TYPE=Release
+build.cmd           cmake --build build -j
+destroot.cmd        cmake --install build --prefix ${destroot}${prefix}

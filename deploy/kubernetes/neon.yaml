@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neon
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: neon } }
+  template:
+    metadata: { labels: { app: neon } }
+    spec:
+      securityContext:
+        runAsUser: 10001
+        runAsNonRoot: true
+        fsGroup: 20001
+      containers:
+      - name: neon
+        image: ghcr.io/your/repo/neon:latest
+        args: ["--version"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+          seccompProfile: { type: RuntimeDefault }
+        resources:
+          requests: { cpu: "10m", memory: "32Mi" }
+          limits: { cpu: "100m", memory: "64Mi" }
+        livenessProbe: { exec: { command: ["neon","--version"] }, initialDelaySeconds: 5, periodSeconds: 30 }
+        readinessProbe: { exec: { command: ["neon","--version"] }, initialDelaySeconds: 5, periodSeconds: 30 }

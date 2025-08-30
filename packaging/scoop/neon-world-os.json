@@ -1,0 +1,15 @@
+{
+  "version": "210.0.0",
+  "description": "Host-embedded OS simulator (C++)",
+  "homepage": "https://example.invalid/neon-world-os",
+  "license": "MIT",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/your/repo/releases/download/v210.0.0/neon-world-os-210.0.0-windows.zip",
+      "hash": "REPLACE_ME",
+      "bin": [
+        "neon.exe"
+      ]
+    }
+  }
+}

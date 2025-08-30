@@ -1,0 +1,6 @@
+NEON_C_1.0 {
+  global:
+    neon_c_*;
+  local:
+    *;
+};

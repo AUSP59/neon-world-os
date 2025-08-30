@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: neon-world-os
+  description: Host-embedded OS simulator in C++
+  annotations:
+    github.com/project-slug: your-org/neon-world-os
+spec:
+  type: library
+  lifecycle: production
+  owner: neon-maintainers

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NEON trace dump schema",
+  "type": "object",
+  "required": [
+    "traceEvents"
+  ],
+  "properties": {
+    "traceEvents": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

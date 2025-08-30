@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.bat eol=crlf
+*.ps1 eol=crlf
+docs/** linguist-documentation
+.github export-ignore
+.devcontainer export-ignore
+packaging/** export-ignore
+tools/release/** !export-ignore

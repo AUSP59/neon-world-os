@@ -1,0 +1,11 @@
+.git
+.github
+build
+.bazel*
+bazel-*
+.vscode
+.devcontainer
+*.swp
+*.tmp
+*.log
+**/__pycache__/

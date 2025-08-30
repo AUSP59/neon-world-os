@@ -1,0 +1,3 @@
+# NEON-WORLD-OS sample configuration (INI-like, sectionless)
+# telemetry = on|off
+telemetry = on

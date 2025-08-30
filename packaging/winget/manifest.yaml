@@ -1,0 +1,13 @@
+# Winget manifest skeleton
+PackageIdentifier: NeonWorldOS.Neon
+PackageVersion: 250.0.0
+PackageName: NEON-WORLD-OS
+Publisher: NEON
+License: MIT
+PackageUrl: https://example.invalid/neon-world-os
+ShortDescription: Host-embedded OS simulator (C++)
+Installers:
+  - Architecture: x64
+    InstallerType: zip
+    InstallerUrl: https://github.com/your/repo/releases/download/v250.0.0/neon-world-os-250.0.0-windows.zip
+    InstallerSha256: REPLACE_ME

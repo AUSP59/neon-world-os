@@ -1,0 +1,5 @@
+
+Contact: mailto:security@neon.local
+Preferred-Languages: en
+Policy: See SECURITY.md for vulnerability disclosure guidance.
+Expires: 2030-01-01T00:00:00.000Z

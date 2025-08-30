@@ -1,0 +1,20 @@
+name: Bug report
+description: File a bug report
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: What happened and what did you expect?
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: Minimum steps / code to reproduce
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `neon --version-json`

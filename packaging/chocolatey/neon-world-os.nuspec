@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>neon-world-os</id>
+    <version>290.0.0</version>
+    <title>NEON-WORLD-OS</title>
+    <authors>NEON</authors>
+    <projectUrl>https://example.invalid/neon-world-os</projectUrl>
+    <license type="expression">MIT</license>
+    <description>Host-embedded OS simulator (C++)</description>
+    <tags>neon world os cplusplus</tags>
+  </metadata>
+</package>

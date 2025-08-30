@@ -1,0 +1,25 @@
+# Build artifacts
+/build/
+/b*/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake-build-*/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+
+# Packages
+dist/
+*.tar.gz
+*.zip

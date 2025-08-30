@@ -1,0 +1,15 @@
+
+site_name: NEON-WORLD-OS
+nav:
+  - Home: docs/index.md
+  - Getting Started: docs/getting-started.md
+  - CLI: docs/cli-spec.md
+  - Architecture: docs/ARCHITECTURE.md
+  - Governance: GOVERNANCE.md
+  - Contributing: CONTRIBUTING.md
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true

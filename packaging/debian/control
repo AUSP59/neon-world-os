@@ -1,0 +1,12 @@
+Source: neon-world-os
+Section: utils
+Priority: optional
+Maintainer: NEON Maintainers <maintainers@example.invalid>
+Build-Depends: debhelper-compat (= 13), cmake, g++, make
+Standards-Version: 4.6.2
+Homepage: https://example.invalid/neon-world-os
+
+Package: neon-world-os
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Host-embedded OS simulator (C++)

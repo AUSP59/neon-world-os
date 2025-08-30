@@ -1,0 +1,13 @@
+cc_library(
+    name = "neon",
+    srcs = glob(["src/**/*.cpp"]),
+    hdrs = glob(["include/**/*.hpp", "include/**/*.h"]),
+    includes = ["include"],
+    copts = ["-std=c++20"],
+    visibility = ["//visibility:public"],
+)
+cc_binary(
+    name = "neon_app",
+    srcs = ["apps/neon.cpp"],
+    deps = [":neon"],
+)

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "apiVersion",
+    "kind",
+    "spec"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "apps/v1"
+    },
+    "kind": {
+      "const": "Deployment"
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "template",
+        "selector"
+      ],
+      "properties": {
+        "template": {
+          "type": "object",
+          "required": [
+            "spec"
+          ],
+          "properties": {
+            "spec": {
+              "type": "object",
+              "required": [
+                "containers",
+                "securityContext"
+              ],
+              "properties": {
+                "securityContext": {
+                  "type": "object",
+                  "properties": {
+                    "runAsNonRoot": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "runAsNonRoot"
+                  ]
+                },
+                "containers": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "securityContext",
+                      "readinessProbe",
+                      "livenessProbe"
+                    ],
+                    "properties": {
+                      "securityContext": {
+                        "type": "object",
+                        "properties": {
+                          "allowPrivilegeEscalation": {
+                            "const": false
+                          },
+                          "readOnlyRootFilesystem": {
+                            "const": true
+                          },
+                          "capabilities": {
+                            "type": "object",
+                            "properties": {
+                              "drop": {
+                                "type": "array",
+                                "contains": {
+                                  "const": "ALL"
+                                }
+                              }
+                            },
+                            "required": [
+                              "drop"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "allowPrivilegeEscalation",
+                          "readOnlyRootFilesystem",
+                          "capabilities"
+                        ]
+                      },
+                      "readinessProbe": {
+                        "type": "object"
+                      },
+                      "livenessProbe": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}
