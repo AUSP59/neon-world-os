@@ -1,0 +1,12 @@
+name: Semgrep
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: .semgrep.yml

@@ -1,0 +1,13 @@
+name: cmake-format
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cmake-format
+        run: pipx install cmake-format || pip install --user cmake-format
+      - name: Lint CMake files
+        run: cmake-format -c .cmake-format.yaml $(git ls-files '*.cmake' 'CMakeLists.txt') --check

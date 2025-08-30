@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.22)
+project(neon_example_cpp LANGUAGES CXX)
+find_package(Neon CONFIG REQUIRED)
+add_executable(example main.cpp)
+target_link_libraries(example PRIVATE Neon::neon)

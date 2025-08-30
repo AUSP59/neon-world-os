@@ -1,0 +1,13 @@
+name: Build with -Werror
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  build-werror:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure (-Werror)
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DNEON_WERROR=ON
+      - name: Build
+        run: cmake --build build -j

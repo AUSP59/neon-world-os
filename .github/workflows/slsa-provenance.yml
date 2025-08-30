@@ -1,0 +1,24 @@
+name: SLSA provenance
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+permissions:
+  actions: read
+  id-token: write
+  contents: read
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build artifact
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+          tar -czf neon-artifact.tar.gz -C build apps/neon
+      - name: Generate provenance
+        uses: slsa-framework/slsa-github-generator/.github/actions/generator@v2.0.0
+        with:
+          base64-subjects: "$(sha256sum neon-artifact.tar.gz | cut -d' ' -f1)"

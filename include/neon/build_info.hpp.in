@@ -1,0 +1,10 @@
+#pragma once
+// SPDX-License-Identifier: MIT
+namespace neon::build {
+inline constexpr const char* version = "@PROJECT_VERSION@";
+inline constexpr const char* git     = "@GIT_COMMIT@";
+inline constexpr const char* compiler= "@NEON_BUILD_COMPILER@";
+inline constexpr const char* type    = "@NEON_BUILD_TYPE@";
+inline constexpr const char* std     = "@NEON_STD@";
+inline constexpr const char* date    = "@BUILD_DATE@";
+}

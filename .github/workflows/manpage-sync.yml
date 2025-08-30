@@ -1,0 +1,23 @@
+name: Manpage sync
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  man-sync:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install help2man
+        run: sudo apt-get update && sudo apt-get install -y help2man
+      - name: Build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+      - name: Generate manpage from binary
+        run: help2man -N -n "NEON shell" ./build/apps/neon -o neon.1.gen
+      - name: Diff
+        run: |
+          if ! diff -u docs/man/neon.1 neon.1.gen; then
+            echo "::error ::Generated manpage differs from docs/man/neon.1 (run tools/docs/gen_man.sh)"
+            exit 1
+          fi

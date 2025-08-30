@@ -1,0 +1,14 @@
+
+name: Lint
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check clang-format
+        run: |
+          sudo apt-get update && sudo apt-get install -y clang-format
+          diff -u <(git ls-files '*.[ch]pp' '*.[ch]xx' '*.[ch]') <(git ls-files '*.[ch]pp' '*.[ch]xx' '*.[ch]' | xargs clang-format -style=file -sort-includes | awk 'BEGIN{RS="";ORS="";}1') || true

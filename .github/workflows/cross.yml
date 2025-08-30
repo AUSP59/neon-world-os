@@ -1,0 +1,16 @@
+
+name: Cross-compile (aarch64)
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  arm64:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cross toolchain
+        run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=toolchains/aarch64-linux-gnu.cmake -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build -j

@@ -1,0 +1,12 @@
+ci:
+  - .github/workflows/**/*
+docs:
+  - docs/**/*
+  - '**/*.md'
+packaging:
+  - packaging/**/*
+code:
+  - src/**/*
+  - include/**/*
+tests:
+  - tests/**/*

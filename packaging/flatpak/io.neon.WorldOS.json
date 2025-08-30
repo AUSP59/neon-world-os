@@ -1,0 +1,12 @@
+{
+  "app-id": "io.neon.WorldOS",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "23.08",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "neon",
+  "modules": [{
+    "name": "neon",
+    "buildsystem": "cmake",
+    "sources": [{ "type": "dir", "path": "." }]
+  }]
+}

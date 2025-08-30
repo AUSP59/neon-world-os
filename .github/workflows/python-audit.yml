@@ -1,0 +1,22 @@
+name: Python security audit
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Install tools
+        run: pip install pip-audit bandit doc8
+      - name: pip-audit
+        run: pip-audit -r docs/requirements.txt || true
+      - name: bandit (tools/*.py)
+        run: bandit -q -r tools || true
+      - name: doc8 (docs/*.rst)
+        run: |
+          if [ -d docs/sphinx ]; then
+            doc8 docs/sphinx || true
+          fi

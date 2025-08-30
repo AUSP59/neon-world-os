@@ -1,0 +1,5 @@
+
+# See GitHub CODEOWNERS format for reference
+*       @neon-core-team
+docs/*  @neon-docs
+src/*   @neon-engine

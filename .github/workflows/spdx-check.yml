@@ -1,0 +1,10 @@
+name: SPDX headers check
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  spdx:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash tools/spdx_check.sh

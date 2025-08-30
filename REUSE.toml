@@ -1,0 +1,5 @@
+
+version = 1
+# All files default to MIT unless otherwise noted
+[licenses]
+default = "MIT"

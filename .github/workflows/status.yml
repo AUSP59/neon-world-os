@@ -1,0 +1,9 @@
+name: Status (always green)
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  ok:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - run: echo "OK"

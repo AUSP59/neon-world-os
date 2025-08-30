@@ -1,0 +1,26 @@
+name: SBOM (binary) on Release
+on:
+  release:
+    types: [published]
+permissions: { contents: read }
+jobs:
+  sbom-binary:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Release
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCPACK_GENERATOR="ZIP;TGZ"
+          cmake --build build -j
+          cmake --build build --target package
+      - name: Generate SBOM (Anchore Syft)
+        uses: anchore/sbom-action@v0
+        with:
+          path: build
+          format: cyclonedx-json
+          output-file: sbom/binary.cdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom-binary
+          path: sbom/binary.cdx.json

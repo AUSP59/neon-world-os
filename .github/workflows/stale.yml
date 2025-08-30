@@ -1,0 +1,16 @@
+name: Stale
+on:
+  schedule:
+    - cron: '33 2 * * 1'
+permissions: { contents: read }
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-stale: 60
+          days-before-close: 14
+          stale-issue-message: 'This issue has been automatically marked as stale due to inactivity.'
+          exempt-issue-labels: 'security,good first issue'

@@ -1,0 +1,14 @@
+name: Reprotest
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  reprotest:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install reprotest
+        run: sudo apt-get update && sudo apt-get install -y reprotest
+      - name: Run reprotest
+        run: |
+          reprotest --vary=+all 'cmake -S . -B b && cmake --build b -j' 'ls -l b/apps/neon' || true

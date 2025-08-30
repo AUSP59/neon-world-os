@@ -1,0 +1,35 @@
+name: Docs (Sphinx)
+on:
+  push: { branches: [ main ] }
+  pull_request:
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          sudo apt-get update && sudo apt-get install -y doxygen graphviz python3-pip
+          pip3 install -r docs/requirements.txt
+      - name: Build Doxygen
+        run: doxygen Doxyfile || true
+      - name: Build Sphinx
+        working-directory: docs/sphinx
+        run: sphinx-build -b html . _build/html
+      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('docs/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+        with: { path: docs/sphinx/_build/html }
+  deploy:
+    needs: build-docs
+    permissions: { pages: write, id-token: write }
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/deploy-pages@v4

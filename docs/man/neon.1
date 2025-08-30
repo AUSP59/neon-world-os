@@ -1,0 +1,22 @@
+
+.TH NEON 1 "NEON-WORLD-OS" "v3.0.0" "User Commands"
+.SH NAME
+neon \- host-embedded OS simulator CLI
+.SH SYNOPSIS
+.B neon
+[\-c CMD] [\-\-json]
+.SH DESCRIPTION
+Interactive or non\-interactive shell for NEON\-WORLD\-OS.
+
+.SH OPTIONS
+--json
+--doctor
+--version
+-e "CMD1;CMD2"
+-f FILE
+
+.SH SECURITY COMMANDS
+.B seal on|off|status
+Toggle immutable VFS mode.
+.B policy on|off|allow <cmd>|deny <cmd>|status
+Runtime command allowlisting.

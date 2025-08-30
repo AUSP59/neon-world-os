@@ -1,0 +1,16 @@
+name: neon-world-os
+base: core22
+version: '300.0.0'
+summary: Host-embedded OS simulator (C++)
+description: |
+  NEON-WORLD-OS: security, reproducibility, and great DX.
+grade: devel
+confinement: strict
+apps:
+  neon:
+    command: bin/neon --version
+parts:
+  neon:
+    plugin: cmake
+    source: .
+    build-packages: [cmake, g++]

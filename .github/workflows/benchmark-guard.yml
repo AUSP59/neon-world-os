@@ -1,0 +1,19 @@
+name: Benchmark guard
+on:
+  pull_request:
+  workflow_dispatch:
+permissions: { contents: read }
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build benchmarks
+        run: |
+          cmake -S . -B build -DBUILD_BENCHMARKS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+      - name: Run benchmarks (JSON)
+        run: ./build/neon_bench --benchmark_format=json --benchmark_out=bench.json || true
+      - name: Guard thresholds
+        run: python3 tools/bench/guard.py bench.json tools/bench/thresholds.example.json

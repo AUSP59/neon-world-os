@@ -1,0 +1,16 @@
+
+name: ThreadSanitizer
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  tsan:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure TSan
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_UBSAN=OFF -DENABLE_ASAN=OFF
+      - name: Build with TSan
+        run: cmake --build build -j -- -fsanitize=thread
+      - name: Run tests (TSan)
+        run: ASAN_OPTIONS=detect_leaks=0 TSAN_OPTIONS=halt_on_error=1 ctest --test-dir build --output-on-failure

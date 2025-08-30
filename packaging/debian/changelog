@@ -1,0 +1,5 @@
+neon-world-os (210.0.0-1) unstable; urgency=medium
+
+  * Initial debianization skeleton.
+
+ -- NEON Maintainers <maintainers@example.invalid>  Sat, 30 Aug 2025 07:06:06 +0000

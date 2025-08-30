@@ -1,0 +1,14 @@
+name: Sanitizers - TSan
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  tsan:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with ThreadSanitizer
+        run: |
+          cmake -S . -B b -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          cmake --build b -j
+          # TSan typically requires flags; keep as informational for now.

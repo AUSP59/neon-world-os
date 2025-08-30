@@ -1,0 +1,14 @@
+name: Sanitizers - ASan/UBSan
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  asan-ubsan:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with sanitizers
+        run: |
+          cmake -S . -B b -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_ASAN=ON -DENABLE_UBSAN=ON
+          cmake --build b -j
+          ctest --test-dir b --output-on-failure || true

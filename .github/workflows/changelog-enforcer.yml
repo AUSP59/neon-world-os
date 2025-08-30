@@ -1,0 +1,21 @@
+name: Changelog Enforcer
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+permissions: { contents: read }
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Check for CHANGELOG update or label
+        run: |
+          if git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -q "^CHANGELOG.md$"; then
+            echo "Changelog updated."
+          elif echo "${{ toJson(github.event.pull_request.labels) }}" | grep -q "no-changelog"; then
+            echo "no-changelog label present."
+          else
+            echo "::error ::CHANGELOG.md missing and no 'no-changelog' label"; exit 1
+          fi

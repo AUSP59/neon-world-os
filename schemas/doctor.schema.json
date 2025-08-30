@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NEON doctor JSON schema",
+  "type": "object",
+  "required": [
+    "name",
+    "version",
+    "telemetry_effective",
+    "config",
+    "env"
+  ],
+  "properties": {
+    "name": {
+      "const": "NEON-WORLD-OS"
+    },
+    "version": {
+      "type": "string"
+    },
+    "telemetry_effective": {
+      "type": "boolean"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "telemetry": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "env": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

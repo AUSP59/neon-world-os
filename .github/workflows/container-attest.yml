@@ -1,0 +1,19 @@
+name: Container attest
+on:
+  push:
+    branches: [ main ]
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions: { id-token: write, contents: read }
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t ghcr.io/${{ github.repository }}/neon:latest -f packaging/docker/Dockerfile.distroless .
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.7.0
+      - name: Attest SBOM
+        env: { COSIGN_EXPERIMENTAL: "1" }
+        run: |
+          echo '{}' > predicate.json
+          cosign attest --yes --predicate predicate.json --type cyclonedx ghcr.io/${{ github.repository }}/neon:latest

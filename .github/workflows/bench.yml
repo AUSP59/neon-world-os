@@ -1,0 +1,20 @@
+
+name: Bench (smoke)
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build benchmarks
+        run: |
+          cmake -S . -B build -DBUILD_BENCHMARKS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+      - name: Run (short) and upload json
+        run: ./build/neon_bench --benchmark_min_time=0.01 --benchmark_format=json > bench.json || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bench-json
+          path: bench.json

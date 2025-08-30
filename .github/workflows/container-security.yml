@@ -1,0 +1,13 @@
+name: Container Security Run
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  run-hardened:
+    if: ${{ hashFiles('packaging/docker/Dockerfile.distroless') != '' }}
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t neon:test -f packaging/docker/Dockerfile.distroless .
+      - run: |
+          docker run --rm --read-only --cap-drop ALL --security-opt no-new-privileges             --pids-limit 256 --memory 128m neon:test --version

@@ -1,0 +1,16 @@
+name: hadolint
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  docker-lint:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install hadolint
+        run: |
+          curl -sSL https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -o hadolint
+          chmod +x hadolint && sudo mv hadolint /usr/local/bin/
+      - name: Run hadolint
+        run: |
+          if [ -f packaging/docker/Dockerfile.distroless ]; then hadolint packaging/docker/Dockerfile.distroless || true; fi

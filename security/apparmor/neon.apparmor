@@ -1,0 +1,8 @@
+# AppArmor profile (example)
+#include <tunables/global>
+profile neon flags=(attach_disconnected) {
+  /usr/bin/neon rix,
+  capability chown,
+  deny network,
+  deny mount,
+}

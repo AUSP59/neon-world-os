@@ -1,0 +1,11 @@
+name: Container Smoke
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t neon:test -f packaging/docker/Dockerfile.distroless .
+      - run: docker run --rm neon:test --version

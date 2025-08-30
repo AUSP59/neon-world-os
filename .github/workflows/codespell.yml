@@ -1,0 +1,10 @@
+name: Codespell
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  spell:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: codespell-project/actions-codespell@v2

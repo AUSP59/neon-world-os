@@ -1,0 +1,38 @@
+name: ABI compatibility
+on:
+  pull_request:
+  workflow_dispatch:
+permissions: { contents: read }
+jobs:
+  abi:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y abi-dumper abi-compliance-checker cmake g++ make
+      - name: Build current (shared)
+        run: |
+          cmake -S . -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+          # Find libneon.*
+          find build -name "libneon*.so*" -o -name "neon.dll" -o -name "neon.dylib" | head -n1 > libpath.txt
+          echo "LIB_PATH=$(cat libpath.txt)" >> $GITHUB_ENV
+      - name: Dump current ABI
+        run: |
+          abi-dumper "$LIB_PATH" -o curr.abi --public-headers include || echo "No shared lib; skipping" && touch curr.abi
+      - name: Dump base ABI
+        if: github.event_name == 'pull_request'
+        run: |
+          git checkout --quiet ${{ github.event.pull_request.base.sha }}
+          cmake -S . -B buildb -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build buildb -j || true
+          find buildb -name "libneon*.so*" -o -name "neon.dll" -o -name "neon.dylib" | head -n1 > libpathb.txt || true
+          if [ -s libpathb.txt ]; then abi-dumper "$(cat libpathb.txt)" -o base.abi --public-headers include; else touch base.abi; fi
+      - name: Compare ABI
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ -s base.abi ] && [ -s curr.abi ]; then abi-compliance-checker -l neon -old base.abi -new curr.abi; else echo "No ABI info to compare."; fi

@@ -1,0 +1,70 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22
+  },
+  "configurePresets": [
+    {
+      "name": "default-release",
+      "generator": "Ninja",
+      "binaryDir": "build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "asan",
+      "inherits": [
+        "default-release"
+      ],
+      "cacheVariables": {
+        "ENABLE_ASAN": "ON",
+        "ENABLE_UBSAN": "ON"
+      }
+    },
+    {
+      "name": "tsan",
+      "inherits": [
+        "default-release"
+      ],
+      "cacheVariables": {
+        "ENABLE_TSAN": "ON"
+      }
+    },
+    {
+      "name": "unity",
+      "inherits": [
+        "default-release"
+      ],
+      "cacheVariables": {
+        "NEON_UNITY_BUILD": "ON"
+      }
+    },
+    {
+      "name": "lld",
+      "inherits": [
+        "default-release"
+      ],
+      "cacheVariables": {
+        "NEON_USE_LLD": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build",
+      "configurePreset": "default-release",
+      "jobs": 0
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test",
+      "configurePreset": "default-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+
+name: Container Build & Scan
+on: [push, pull_request]
+jobs:
+  build-scan:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions: { contents: read }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t neon-world-os:ci -f packaging/docker/Dockerfile .
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: neon-world-os:ci
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true

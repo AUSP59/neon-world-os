@@ -1,0 +1,10 @@
+name: Inclusive language
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  alex:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: get-alex/alex-action@v1

@@ -1,0 +1,17 @@
+name: Coverage gate
+on:
+  pull_request:
+  push: { branches: [ main ] }
+permissions: { contents: read }
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with coverage
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+          cmake --build build -j
+          ctest --test-dir build --output-on-failure
+          gcovr -r . --xml -o build/coverage.xml --threshold 75

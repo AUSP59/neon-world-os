@@ -1,0 +1,17 @@
+name: clang-tidy review
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  clang-tidy-review:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      - name: Run clang-tidy-review
+        uses: ZedThree/clang-tidy-review@v0.21.0
+        with:
+          build_dir: build
+          config_file: .clang-tidy
+          fail_on_error: false

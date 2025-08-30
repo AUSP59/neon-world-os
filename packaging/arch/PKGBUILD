@@ -1,0 +1,14 @@
+pkgname=neon-world-os
+pkgver=130.0.0
+pkgrel=1
+arch=('x86_64' 'aarch64')
+license=('MIT')
+url='https://example.invalid/neon-world-os'
+source=()
+build() {
+  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+  cmake --build build -j
+}
+package() {
+  DESTDIR="$pkgdir" cmake --install build --prefix /usr
+}

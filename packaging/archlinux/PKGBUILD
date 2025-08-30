@@ -1,0 +1,18 @@
+pkgname=neon-world-os
+pkgver=290.0.0
+pkgrel=1
+pkgdesc="Host-embedded OS simulator (C++)"
+arch=('x86_64' 'aarch64')
+url="https://example.invalid/neon-world-os"
+license=('MIT')
+depends=('glibc')
+makedepends=('cmake' 'ninja' 'gcc')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/your/repo/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+build() {
+  cmake -S "$srcdir/your-repo-$pkgver" -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+  cmake --build build -j
+}
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}

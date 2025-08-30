@@ -1,0 +1,23 @@
+name: Locale & TZ matrix
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  matrix:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        locale: [C, en_US.UTF-8, es_MX.UTF-8]
+        tz: [UTC, America/Mexico_City, Asia/Tokyo]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install locales
+        run: sudo apt-get update && sudo apt-get install -y locales && sudo locale-gen en_US.UTF-8 es_MX.UTF-8
+      - name: Build & test
+        run: |
+          export LC_ALL=${{ matrix.locale }}
+          export LANG=${{ matrix.locale }}
+          export TZ=${{ matrix.tz }}
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+          ctest --test-dir build --output-on-failure

@@ -1,0 +1,17 @@
+name: Whitepaper PDF
+on:
+  push: { branches: [ main ] }
+  workflow_dispatch:
+permissions: { contents: read }
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+      - name: Build PDF
+        run: pandoc WHITEPAPER.md -o WHITEPAPER.pdf
+      - uses: actions/upload-artifact@v4
+        with: { name: whitepaper-pdf, path: WHITEPAPER.pdf }

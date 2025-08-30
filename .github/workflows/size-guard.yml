@@ -1,0 +1,32 @@
+name: Size budget guard
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  size-guard:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Build HEAD
+        run: |
+          cmake -S . -B bhead -DCMAKE_BUILD_TYPE=Release
+          cmake --build bhead -j
+          stat --format='%s' bhead/apps/neon || true
+          echo "HEAD_SIZE=$(stat --format='%s' bhead/apps/neon 2>/dev/null || echo 0)" >> $GITHUB_ENV
+      - name: Build BASE
+        run: |
+          git checkout --quiet ${{ github.event.pull_request.base.sha }}
+          cmake -S . -B bbase -DCMAKE_BUILD_TYPE=Release
+          cmake --build bbase -j || true
+          echo "BASE_SIZE=$(stat --format='%s' bbase/apps/neon 2>/dev/null || echo 0)" >> $GITHUB_ENV
+      - name: Compare
+        run: |
+          echo "BASE=$BASE_SIZE HEAD=$HEAD_SIZE"
+          if [ "$BASE_SIZE" -gt 0 ] && [ "$HEAD_SIZE" -gt 0 ]; then
+            inc=$(( (HEAD_SIZE - BASE_SIZE) * 100 / BASE_SIZE ))
+            echo "Increase %: $inc"
+            if [ "$inc" -gt 15 ]; then
+              echo "::error ::Binary size increased by >15%"; exit 1
+            fi
+          fi

@@ -1,0 +1,16 @@
+
+name: Windows build
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  windows:
+    runs-on: windows-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --config Release -j
+      - name: Tests
+        run: ctest --test-dir build -C Release --output-on-failure

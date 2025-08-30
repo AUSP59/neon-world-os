@@ -1,0 +1,2 @@
+#compdef neon
+_arguments   '--help[Show help]'   '--version[Show version]'   '--about-json[Print build metadata JSON]'   '1: :((metrics\:print\ metrics trace\:trace\ tools))'

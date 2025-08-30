@@ -1,0 +1,10 @@
+name: DCO
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  dco:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker://ghcr.io/scality/dco-check:latest

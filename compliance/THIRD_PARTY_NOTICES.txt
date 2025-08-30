@@ -1,0 +1,4 @@
+This project fetches third-party dependencies at build time:
+
+- GoogleTest (BSD-3-Clause): https://github.com/google/googletest
+- Google Benchmark (Apache-2.0): https://github.com/google/benchmark

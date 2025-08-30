@@ -1,0 +1,30 @@
+
+name: Install & find_package test
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  install-test:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure+Build+Install
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+          cmake --install build --prefix $PWD/install
+      - name: Try consumer project
+        run: |
+          cat > consumer/CMakeLists.txt <<'EOF'
+          cmake_minimum_required(VERSION 3.22)
+          project(consumer CXX)
+          find_package(NEONWorldOS REQUIRED)
+          add_executable(use_neon main.cpp)
+          target_link_libraries(use_neon PRIVATE neon::neon)
+          EOF
+          cat > consumer/main.cpp <<'EOF'
+          #include "neon/vfs.hpp"
+          int main(){ neon::Vfs v; return v.Exists("/") ? 0 : 1; }
+          EOF
+          cmake -S consumer -B consumer/build -DNEONWorldOS_DIR=$PWD/install/lib/cmake/NEONWorldOS
+          cmake --build consumer/build -j

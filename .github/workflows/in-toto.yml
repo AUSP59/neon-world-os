@@ -1,0 +1,21 @@
+name: in-toto attestation (ephemeral)
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  attest:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build artifact
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+      - name: Install in-toto
+        run: pipx install in-toto || python3 -m pip install --user in-toto
+      - name: Generate ephemeral key & attest
+        run: |
+          in-toto-keygen --algorithm rsa --filename ci_rsa || true
+          in-toto-run --step-name build --materials . --products build/apps/neon --key ci_rsa --signatures build.link || true
+      - uses: actions/upload-artifact@v4
+        with: { name: in-toto-link, path: build.link }

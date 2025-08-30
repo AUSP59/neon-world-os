@@ -1,0 +1,29 @@
+
+name: ABI dump (neonc)
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  abi:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y abi-dumper abi-compliance-checker
+      - name: Build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+      - name: Dump ABI for neonc
+        run: |
+          if [ -f build/lib/libneonc.so ]; then
+            abi-dumper build/lib/libneonc.so -o abidump-neonc.json -public-headers include
+            tar -czf abidump-neonc.tgz abidump-neonc.json
+          else
+            echo "neonc shared library not found; skipping ABI dump"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: abidump-neonc
+          path: abidump-neonc.tgz
+          if-no-files-found: ignore

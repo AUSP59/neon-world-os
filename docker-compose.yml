@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  neon:
+    build:
+      context: .
+      dockerfile: packaging/docker/Dockerfile.distroless
+    read_only: true
+    cap_drop: [ "ALL" ]
+    command: ["--version"]

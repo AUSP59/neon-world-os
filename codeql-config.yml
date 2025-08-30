@@ -1,0 +1,6 @@
+name: "NEON CodeQL Config"
+queries:
+  - uses: security-extended
+paths:
+  - src
+  - include

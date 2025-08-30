@@ -1,0 +1,23 @@
+name: Build (ccache cached)
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
+            ccache-${{ runner.os }}-
+      - name: Configure & Build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DNEON_USE_CCACHE=ON
+          cmake --build build -j
+      - name: CCache stats
+        run: ccache -s || true

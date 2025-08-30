@@ -1,0 +1,31 @@
+name: SBOM diff
+on:
+  pull_request:
+permissions: { contents: read }
+jobs:
+  sbom-diff:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Generate SBOM (HEAD)
+        run: |
+          python3 tools/sbom/generate.py
+          cp sbom/source.cdx.json sbom_head.json
+      - name: Generate SBOM (BASE)
+        run: |
+          git checkout --quiet ${{ github.event.pull_request.base.sha }}
+          python3 tools/sbom/generate.py
+          cp sbom/source.cdx.json sbom_base.json
+      - name: Diff
+        run: |
+          pipx install cyclonedx-bom 2>/dev/null || python3 -m pip install --user cyclonedx-bom
+          python3 - <<'PY'
+import json, sys
+a=json.load(open('sbom_base.json')); b=json.load(open('sbom_head.json'))
+def comps(s): return { (c.get('name'), c.get('version')) for c in s.get('components',[]) }
+removed = comps(a) - comps(b)
+added   = comps(b) - comps(a)
+print("REMOVED:", sorted(removed)); print("ADDED:", sorted(added))
+PY

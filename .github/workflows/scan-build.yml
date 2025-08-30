@@ -1,0 +1,16 @@
+name: Clang Static Analyzer (scan-build)
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clang tools
+        run: sudo apt-get update && sudo apt-get install -y clang-tools
+      - name: Run scan-build
+        run: |
+          scan-build -o scan --status-bugs cmake -S . -B b && scan-build -o scan --status-bugs cmake --build b -j || true
+      - uses: actions/upload-artifact@v4
+        with: { name: scan-build-reports, path: scan }

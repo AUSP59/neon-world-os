@@ -1,0 +1,18 @@
+
+name: Fuzz smoke
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clang
+        run: sudo apt-get update && sudo apt-get install -y clang
+      - name: Build fuzz target
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++ -DBUILD_FUZZ=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build -j --target shell_fuzz
+      - name: Run fuzz (short smoke)
+        run: ./build/shell_fuzz -runs=2000 || true

@@ -1,0 +1,17 @@
+name: SPDX SBOM
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  spdx:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install spdx-sbom-generator
+        run: |
+          curl -sSL -o spdx-sbom-generator https://raw.githubusercontent.com/spdx/spdx-sbom-generator/main/bin/spdx-sbom-generator
+          chmod +x spdx-sbom-generator
+      - name: Generate SPDX
+        run: ./spdx-sbom-generator -o sbom -p . || true
+      - uses: actions/upload-artifact@v4
+        with: { name: sbom-spdx, path: sbom }

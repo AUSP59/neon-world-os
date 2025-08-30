@@ -1,0 +1,15 @@
+name: Include-What-You-Use
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  iwyu:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install IWYU
+        run: sudo apt-get update && sudo apt-get install -y iwyu
+      - name: Configure (IWYU)
+        run: cmake -S . -B build -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE=iwyu
+      - name: Build (collect IWYU suggestions)
+        run: cmake --build build -j || true

@@ -1,0 +1,20 @@
+name: CMake consumer test
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  consume:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build & install NEON
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+          sudo cmake --install build --prefix /usr
+      - name: Build sample consumer
+        working-directory: packaging/consumer-sample
+        run: |
+          cmake -S . -B b -DCMAKE_BUILD_TYPE=Release
+          cmake --build b -j
+          ./b/consumer

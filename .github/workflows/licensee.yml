@@ -1,0 +1,13 @@
+name: Licensee
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  licensee:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with: { ruby-version: '3.2' }
+      - run: gem install licensee
+      - run: licensee detect .

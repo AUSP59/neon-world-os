@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NEON about-json schema",
+  "type": "object",
+  "required": [
+    "name",
+    "version",
+    "compiler",
+    "build_type",
+    "std",
+    "date"
+  ],
+  "properties": {
+    "name": {
+      "const": "NEON-WORLD-OS"
+    },
+    "version": {
+      "type": "string"
+    },
+    "git": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "compiler": {
+      "type": "string"
+    },
+    "build_type": {
+      "type": "string"
+    },
+    "std": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

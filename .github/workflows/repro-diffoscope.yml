@@ -1,0 +1,21 @@
+name: Reproducible diff (diffoscope)
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  diffoscope:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install diffoscope
+        run: sudo apt-get update && sudo apt-get install -y diffoscope
+      - name: Build A/B with fixed SOURCE_DATE_EPOCH
+        env: { SOURCE_DATE_EPOCH: "1700000000" }
+        run: |
+          cmake -S . -B b1 -DCMAKE_BUILD_TYPE=Release && cmake --build b1 -j && cmake --build b1 --target package || true
+          cmake -S . -B b2 -DCMAKE_BUILD_TYPE=Release && cmake --build b2 -j && cmake --build b2 --target package || true
+      - name: Compare
+        run: |
+          diffoscope --text diff.txt b1/*.tar.gz b2/*.tar.gz || true
+      - uses: actions/upload-artifact@v4
+        with: { name: diffoscope, path: diff.txt }

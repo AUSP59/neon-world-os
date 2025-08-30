@@ -1,0 +1,16 @@
+
+name: Docs check
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  doxygen:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install doxygen
+        run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
+      - name: Enable warnings as errors
+        run: sed -i 's/^QUIET *= *.*/QUIET = NO/' docs/api/Doxyfile && echo "WARN_AS_ERROR = YES" >> docs/api/Doxyfile
+      - name: Build docs
+        run: doxygen docs/api/Doxyfile

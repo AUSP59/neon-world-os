@@ -1,0 +1,25 @@
+name: Reproducible build check
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  repro:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build A
+        env: { SOURCE_DATE_EPOCH: "1700000000" }
+        run: |
+          cmake -S . -B buildA -DCMAKE_BUILD_TYPE=Release -DNEON_REPRODUCIBLE=ON
+          cmake --build buildA -j
+          cmake --build buildA --target package
+          sha256sum buildA/*.zip buildA/*.tar.gz > sumsA.txt || true
+      - name: Build B
+        env: { SOURCE_DATE_EPOCH: "1700000000" }
+        run: |
+          cmake -S . -B buildB -DCMAKE_BUILD_TYPE=Release -DNEON_REPRODUCIBLE=ON
+          cmake --build buildB -j
+          cmake --build buildB --target package
+          sha256sum buildB/*.zip buildB/*.tar.gz > sumsB.txt || true
+      - name: Compare checksums
+        run: diff -u sumsA.txt sumsB.txt

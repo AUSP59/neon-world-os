@@ -1,0 +1,15 @@
+name: clang-tidy
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  tidy:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clang-tidy
+        run: sudo apt-get update && sudo apt-get install -y clang-tidy clang-tools
+      - name: Configure (export compile_commands)
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      - name: Run clang-tidy
+        run: run-clang-tidy -p build || true

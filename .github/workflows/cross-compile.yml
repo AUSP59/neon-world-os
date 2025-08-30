@@ -1,0 +1,22 @@
+name: Cross-compile
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  musl:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - run: |
+          cmake -S . -B bmusl -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/linux-musl.cmake
+          cmake --build bmusl -j
+  mingw:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y mingw-w64
+      - run: |
+          cmake -S . -B bmingw -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/mingw-w64.cmake
+          cmake --build bmingw -j

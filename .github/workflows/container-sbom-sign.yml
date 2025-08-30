@@ -1,0 +1,26 @@
+name: Container SBOM & Sign
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-sign:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions: { contents: write, id-token: write }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t ghcr.io/${{ github.repository }}/neon:latest -f packaging/docker/Dockerfile .
+      - name: Generate image SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ghcr.io/${{ github.repository }}/neon:latest
+          format: cyclonedx-json
+          output-file: sbom/image.cdx.json
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.7.0
+      - name: Sign image (keyless)
+        env: { COSIGN_EXPERIMENTAL: "1" }
+        run: cosign sign --yes ghcr.io/${{ github.repository }}/neon:latest
+      - uses: actions/upload-artifact@v4
+        with: { name: sbom-image, path: sbom/image.cdx.json }

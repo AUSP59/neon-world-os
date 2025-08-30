@@ -1,0 +1,7 @@
+policy_module(neon, 1.0)
+require {
+  type bin_t;
+  class file { execute read open };
+}
+# Minimal allow rule example (to be expanded per deployment)
+allow bin_t self:file { execute read open };

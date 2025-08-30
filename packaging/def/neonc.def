@@ -1,0 +1,17 @@
+
+LIBRARY "neonc"
+EXPORTS
+  neon_version
+  neon_vfs_create
+  neon_vfs_destroy
+  neon_vfs_mkdir
+  neon_vfs_touch
+  neon_vfs_write
+  neon_vfs_read
+  neon_vfs_list
+  neon_free
+  neon_scheduler_create
+  neon_scheduler_destroy
+  neon_shell_create
+  neon_shell_destroy
+  neon_shell_exec

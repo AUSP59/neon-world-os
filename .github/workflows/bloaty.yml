@@ -1,0 +1,21 @@
+
+name: Bloaty size report
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  bloaty:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install bloaty
+        run: sudo apt-get update && sudo apt-get install -y bloaty
+      - name: Build Release
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j
+      - name: Report
+        run: |
+          bloaty -d sections -n 0 build/bin/neon > bloaty.txt || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloaty-report
+          path: bloaty.txt

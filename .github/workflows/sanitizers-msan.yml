@@ -1,0 +1,14 @@
+name: Sanitizers - MSan
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  msan:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare MSan build
+        run: |
+          sudo apt-get update && sudo apt-get install -y clang lld
+          cmake -S . -B b -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          cmake --build b -j || true

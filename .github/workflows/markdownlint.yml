@@ -1,0 +1,13 @@
+name: Markdownlint
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  mdl:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v15
+        with:
+          globs: |
+            **/*.md
